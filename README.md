@@ -197,7 +197,7 @@ To use ChatGPT Code Review, add an `OPENAI_API_KEY` environment variable with an
 
 [T3 Env](https://env.t3.gg/) is a library that provides environmental variables checking at build time, type validation and transforming. It ensures that your application is using the correct environment variables and their values are of the expected type. You’ll never again struggle with runtime errors caused by incorrect environment variable usage.
 
-Config file is located at `env.mjs`. Simply set your client and server variables and import `env` from any file in your project.
+Config file is located at `env.ts`. Simply set your client and server variables and import `env` from any file in your project.
 
 ```ts
 export const env = createEnv({

@@ -1,5 +1,7 @@
 import type { StorybookConfig } from "@storybook/nextjs";
 
+import { env as t3Env } from "../env.mjs";
+
 const config: StorybookConfig = {
   stories: ["../src/components/**/*.stories.mdx", "../src/components/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions"],
@@ -19,6 +21,11 @@ const config: StorybookConfig = {
       propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
     },
   },
+  // other Storybook config...
+  env: (config1) => ({
+    ...config1,
+    ...t3Env,
+  }),
 };
 
 export default config;
