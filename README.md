@@ -229,4 +229,3 @@ If the required environment variables are not set, you'll get an error message:
 The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
 
 Visit website for more information [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-
