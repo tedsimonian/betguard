@@ -4552,6 +4552,11 @@
   resolved "https://registry.yarnpkg.com/@vercel/otel/-/otel-1.6.1.tgz#445de2c400b4718435ac97ba9afd5a57640b7869"
   integrity sha512-dCfH9FqOXeYJgiZoUMhW0RcUjasvK/JKRS2PPUO8BuPVjGV0XEN5HsEMfYrcXmxaGT4UZbmu2O+Q0i63k2V5Uw==
 
+"@vercel/speed-insights@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@vercel/speed-insights/-/speed-insights-1.0.10.tgz#2e2e6a16beff72cbb58fd59ea8deb18f7338a014"
+  integrity sha512-4uzdKB0RW6Ff2FkzshzjZ+RlJfLPxgm/00i0XXgxfMPhwnnsk92YgtqsxT9OcPLdJUyVU1DqFlSWWjIQMPkh0g==
+
 "@webassemblyjs/ast@1.12.1", "@webassemblyjs/ast@^1.11.5":
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.12.1.tgz#bb16a0e8b1914f979f45864c23819cc3e3f0d4bb"
