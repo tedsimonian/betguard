@@ -23,8 +23,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up node
+      - name: "use node ${{ env.node_version }}"
         uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.node_version }}"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
