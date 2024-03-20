@@ -61,8 +61,8 @@ export const WalletLookupForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <div className="flex w-full max-w-sm items-center space-x-2">
-                  <Input placeholder="XXXXXXXXXXXXXXXX" {...field} />
+                <div className="flex w-full max-w-md items-center space-x-2">
+                  <Input className="w-80" placeholder="XXXXXXXXXXXXXXXX" {...field} />
                   <Button type="submit" disabled={pending || !form.formState.isValid}>
                     {pending ? "Loading..." : "Lookup Wallet"}
                   </Button>

@@ -9,13 +9,13 @@ export type Transaction = {
 
 export type Wallet = {
   address: string;
-  balance: number;
-  transactions: Array<any>;
+  assets: any;
+  transactions: any;
 };
 
 export const defaultWallet: Wallet = {
   address: "XXXXXXXXXXXXXXXXXXXXXXXX",
-  balance: 0,
+  assets: [],
   transactions: [],
 };
 

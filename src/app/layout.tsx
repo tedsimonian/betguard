@@ -1,5 +1,6 @@
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Provider } from "jotai";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -23,7 +24,7 @@ const RootLayout = ({
     <html lang="en" suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased", inter.variable)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          {children}
+          <Provider>{children}</Provider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

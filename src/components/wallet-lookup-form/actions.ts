@@ -1,7 +1,8 @@
 "use server";
 
+import type { GatewayBalancesRequest, GatewayBalancesResponse } from "xrpl";
 import { ZodError } from "zod";
-import { getAddressBalance } from "@/server/xrpl/xrpl";
+import { xrplRequest } from "@/lib/utils";
 import type { Wallet } from "@/state/atoms/wallet-atom";
 import { ServerActionState } from "@/types/common";
 import { formSchema } from "./validation";
@@ -12,14 +13,19 @@ export const getWalletInfo = async (
 ): Promise<ServerActionState<Wallet>> => {
   try {
     const { walletAddress } = formSchema.parse(data);
-    const balance = await getAddressBalance(walletAddress);
+    const response = await xrplRequest<GatewayBalancesRequest, GatewayBalancesResponse>({
+      command: "gateway_balances",
+      account: walletAddress,
+    });
+
+    console.log(JSON.stringify(response, null, 2));
 
     return {
       status: "success",
-      message: `Welcome, ${walletAddress}!`,
+      message: `Welcome, ${response.result.account}!`,
       data: {
-        address: walletAddress,
-        balance,
+        address: response.result.account,
+        assets: response.result.assets,
         transactions: [],
       },
     };
