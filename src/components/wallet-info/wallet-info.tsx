@@ -1,3 +1,5 @@
+"use client";
+
 import { useAtomValue } from "jotai";
 import { walletAtom } from "@/state/atoms/wallet-atom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card/card";

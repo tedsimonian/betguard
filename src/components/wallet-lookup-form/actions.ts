@@ -1,6 +1,7 @@
 "use server";
 
 import { ZodError } from "zod";
+import { getAddressBalance } from "@/server/xrpl/xrpl";
 import type { Wallet } from "@/state/atoms/wallet-atom";
 import { ServerActionState } from "@/types/common";
 import { formSchema } from "./validation";
@@ -11,13 +12,14 @@ export const getWalletInfo = async (
 ): Promise<ServerActionState<Wallet>> => {
   try {
     const { walletAddress } = formSchema.parse(data);
+    const balance = await getAddressBalance(walletAddress);
 
     return {
       status: "success",
       message: `Welcome, ${walletAddress}!`,
       data: {
         address: walletAddress,
-        balance: 0,
+        balance,
         transactions: [],
       },
     };
