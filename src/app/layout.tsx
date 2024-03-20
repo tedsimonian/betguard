@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "@/styles/globals.css";
+import { ThemeProvider } from "@/components/theme-provider/theme-provider";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -13,18 +14,22 @@ export const metadata: Metadata = {
   description: "BetGuard all-in-one tool for finding your next VIP player",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("bg-background min-h-screen font-sans antialiased", inter.variable)}>
-        {children}
+      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.variable)}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

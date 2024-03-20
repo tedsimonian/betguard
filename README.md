@@ -39,9 +39,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - [🎨 Styling and Design System](#-styling-and-design-system)
   - [CVA - A New Approach to Variants](#cva---a-new-approach-to-variants)
 - [💾 State Management](#-state-management)
-  - [Zustand](#zustand)
   - [Jotai](#jotai)
-  - [Recoil](#recoil)
 - [🤖 ChatGPT Code Review](#-chatgpt-code-review)
 - [💻 Environment Variables handling](#-environment-variables-handling)
 - [📒 Conventional Commits](#-conventional-commits)
@@ -154,13 +152,11 @@ export const FilledForm: Story = {
 
 ### Smoke Testing
 
-In this boilerplate, we use Storybook's out-of-the-box support for smoke testing to verify that components render correctly without any errors. Just run `yarn test-storybook` to perform smoke testing. Remember to write stories in JSX or TSX format only. Smoke testing and a lot of other functionalities dont work well with MDX stories.
+We use Storybook's out-of-the-box support for smoke testing to verify that components render correctly without any errors. Just run `yarn test-storybook` to perform smoke testing. Remember to write stories in JSX or TSX format only. Smoke testing and a lot of other functionalities don't work well with MDX stories.
 
 ## 🎨 Styling and Design System
 
-This boilerplate uses Tailwind CSS for styling and CVA for creating a powerful, easy-to-use design system. If you want to learn more about the setup, check out this fantastic video by Vercel:
-
-[![Styling and Design System](https://img.youtube.com/vi/T-Zv73yZ_QI/0.jpg)](https://www.youtube.com/watch?v=T-Zv73yZ_QI&ab_channel=Vercel)
+We use Tailwind CSS for styling and CVA for creating a powerful, easy-to-use design system.
 
 ### CVA - A New Approach to Variants
 
@@ -170,21 +166,11 @@ Creating variants using traditional CSS can be a tedious task, requiring you to 
 
 ## 💾 State Management
 
-While this boilerplate doesn't include a specific state management library, we believe it's essential for you to choose the one that best suits your project's needs. Here are some libraries we recommend for state management:
-
-### Zustand
-
-[Zustand](https://github.com/pmndrs/zustand) is a small, fast, and scalable state management library. It's designed to be simple and intuitive, making it a great choice for small to medium-sized projects. It's also optimized for bundle size, ensuring minimal impact on your app's performance.
+Currently we use Jotai but any state management library works depending on the situation.
 
 ### Jotai
 
 [Jotai](https://github.com/pmndrs/jotai) is an atom-based state management library for React that focuses on providing a minimal and straightforward API. Its atom-based approach allows you to manage your state in a granular way while still being highly optimized for bundle size.
-
-### Recoil
-
-[Recoil](https://recoiljs.org/) is a state management library developed by Facebook, specifically designed for React applications. By utilizing atoms and selectors, Recoil allows you to efficiently manage state and derived state. Its key benefit is the ability to update components only when the state they're subscribed to changes, reducing unnecessary re-renders and keeping your application fast and efficient. Recoil also offers great developer experience with built-in debugging tools.
-
-Choose the library that best fits your requirements and project structure to ensure an efficient state management solution for your application.
 
 ## 🤖 ChatGPT Code Review
 
