@@ -1,7 +1,5 @@
 import { WalletInfo } from "@/components/wallet-info/wallet-info";
 import { WalletLookupForm } from "@/components/wallet-lookup-form/wallet-lookup-form";
-// import { XRPLClient } from "@/components/xrpl-client/xrpl-client";
-// import { Networks } from "@/constants";
 
 const Home = () => {
   return (
@@ -10,10 +8,8 @@ const Home = () => {
       <div className="py-4">Look up a wallet to see detailed info.</div>
       <div>
         <div className="flex w-full flex-col items-center gap-4">
-          {/* <XRPLClient network={Networks.Devnet}> */}
           <WalletLookupForm />
           <WalletInfo />
-          {/* </XRPLClient> */}
         </div>
       </div>
     </main>

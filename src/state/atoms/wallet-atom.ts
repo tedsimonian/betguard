@@ -1,22 +1,28 @@
 import { atom } from "jotai";
-
-export type Transaction = {
-  hash: string;
-  from: string;
-  to: string;
-  value: number;
-};
+import { Asset, Transaction } from "@/types/common";
 
 export type Wallet = {
   address: string;
-  assets: any;
-  transactions: any;
+  balance: Asset;
+  total_balance: Asset;
+  assets: Asset[];
+  transactions: Transaction[];
+  other: any;
 };
 
 export const defaultWallet: Wallet = {
   address: "XXXXXXXXXXXXXXXXXXXXXXXX",
+  balance: {
+    currency: "XRP",
+    value: 0,
+  },
+  total_balance: {
+    currency: "USD",
+    value: 0,
+  },
   assets: [],
   transactions: [],
+  other: null,
 };
 
 export const walletAtom = atom<Wallet>(defaultWallet);
