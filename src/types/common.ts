@@ -1,3 +1,5 @@
+import type { Memo } from "xrpl";
+
 export type ServerActionState<TData> =
   | {
       status: "success";
@@ -15,22 +17,25 @@ export type ServerActionState<TData> =
     }
   | null;
 
+export type Address = {
+  address: string;
+  tag?: number | null;
+};
+
 export type Asset = {
   currency: string;
   value: number;
+  issuer: string | null;
 };
 
-export type Address = {
-  address: string;
-  tag: string;
-};
-
-export type TransactionTransferType = "in" | "out";
+export type TransactionTransferType = "in" | "out" | "internal";
 
 export type Transaction = {
   transfer: TransactionTransferType;
   asset: Asset;
-  source_address: Address;
-  destination_address: Address;
-  fee: Asset;
+  memos?: Memo[];
+  source: Address;
+  destination: Address;
+  fee?: string;
+  date?: Date | null;
 };

@@ -8,9 +8,9 @@ import {
   dropsToXrp,
 } from "xrpl";
 import { ZodError } from "zod";
-import { getCurrencyTickerByAddress, isTickerSymbol, xrplRequest } from "@/lib/utils";
+import { analyzeTransactions, fetchTransactionHistory, request, summarizeTransactions } from "@/lib/xrpl";
 import type { Wallet } from "@/state/atoms/wallet-atom";
-import { Asset, ServerActionState } from "@/types/common";
+import { ServerActionState } from "@/types/common";
 import { formSchema } from "./validation";
 
 export const getWalletInfo = async (
@@ -20,13 +20,13 @@ export const getWalletInfo = async (
   try {
     const { walletAddress } = formSchema.parse(data);
 
-    const ai_response = await xrplRequest<AccountInfoRequest, AccountInfoResponse>({
+    const ai_response = await request<AccountInfoRequest, AccountInfoResponse>({
       command: "account_info",
       account: walletAddress,
       ledger_index: "validated",
     });
 
-    const al_response = await xrplRequest<AccountLinesRequest, AccountLinesResponse>({
+    const al_response = await request<AccountLinesRequest, AccountLinesResponse>({
       command: "account_lines",
       account: walletAddress,
       ledger_index: "validated",
@@ -34,35 +34,16 @@ export const getWalletInfo = async (
 
     const account_address = ai_response.result.account_data.Account;
     const xrp_balance = dropsToXrp(Number(ai_response.result.account_data.Balance));
-    const assets: Asset[] = [];
+
+    const transactions = await fetchTransactionHistory(walletAddress);
+    const analyzed_transactions = analyzeTransactions(transactions, walletAddress);
+    const summary = summarizeTransactions(analyzed_transactions);
 
     const transformed_lines = al_response.result.lines.map((line) => ({
       currency: line.currency,
       value: line.balance,
       issuer: line.account,
     }));
-
-    for (const line of transformed_lines) {
-      if (isTickerSymbol(line.currency)) {
-        assets.push({
-          currency: line.currency,
-          value: Number(line.value),
-        });
-
-        continue;
-      } else {
-        const ticker = await getCurrencyTickerByAddress(line.issuer);
-
-        if (!ticker) {
-          continue;
-        }
-
-        assets.push({
-          currency: ticker,
-          value: Number(line.value),
-        });
-      }
-    }
 
     return {
       status: "success",
@@ -71,15 +52,17 @@ export const getWalletInfo = async (
         address: account_address,
         balance: {
           currency: "XRP",
-          value: xrp_balance,
+          value: String(xrp_balance),
+          issuer: "",
         },
         total_balance: {
           currency: "USD",
-          value: 0,
+          value: String(0),
+          issuer: "",
         },
-        assets,
+        assets: transformed_lines,
         transactions: [],
-        other: ai_response,
+        other: summary,
       },
     };
   } catch (e) {

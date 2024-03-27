@@ -1,11 +1,12 @@
 import { atom } from "jotai";
-import { Asset, Transaction } from "@/types/common";
+import { type Amount } from "xrpl";
+import { Transaction } from "@/types/common";
 
 export type Wallet = {
   address: string;
-  balance: Asset;
-  total_balance: Asset;
-  assets: Asset[];
+  balance: Amount;
+  total_balance: Amount;
+  assets: Amount[];
   transactions: Transaction[];
   other: any;
 };
@@ -14,11 +15,13 @@ export const defaultWallet: Wallet = {
   address: "XXXXXXXXXXXXXXXXXXXXXXXX",
   balance: {
     currency: "XRP",
-    value: 0,
+    value: "0",
+    issuer: "",
   },
   total_balance: {
     currency: "USD",
-    value: 0,
+    value: "0",
+    issuer: "",
   },
   assets: [],
   transactions: [],
