@@ -3,11 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { FieldPath, useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form/form";
+import { Form, FormButton, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form/form";
 import { Input } from "@/components/ui/input/input";
 
 import { defaultWallet, type Wallet, walletAtom } from "@/state/atoms/wallet-atom";
@@ -31,7 +30,6 @@ export const WalletLookupForm = () => {
   });
 
   const [state, formAction] = useFormState<ServerActionState<Wallet>, FormData>(getWalletInfo, null);
-  const { pending } = useFormStatus();
 
   useEffect(() => {
     if (!state) {
@@ -63,9 +61,9 @@ export const WalletLookupForm = () => {
               <FormControl>
                 <div className="flex w-full max-w-md items-center space-x-2">
                   <Input className="w-80" placeholder="XXXXXXXXXXXXXXXX" {...field} />
-                  <Button type="submit" disabled={pending || !form.formState.isValid}>
-                    {pending ? "Loading..." : "Lookup Wallet"}
-                  </Button>
+                  <FormButton type="submit" loadingText="Loading...">
+                    Lookup Wallet
+                  </FormButton>
                 </div>
               </FormControl>
               <FormMessage />

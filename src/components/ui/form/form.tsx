@@ -1,10 +1,12 @@
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
+import { useFormStatus } from "react-dom";
 import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from "react-hook-form";
 
 import { Label } from "@/components/ui/label/label";
 import { cn } from "@/lib/utils";
+import { Button } from "../button/button";
 
 const Form = FormProvider;
 
@@ -133,4 +135,18 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 );
 FormMessage.displayName = "FormMessage";
 
-export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField };
+type FormButtonProps = {
+  loadingText?: string;
+} & Omit<React.ComponentPropsWithoutRef<typeof Button>, "loading" | "disabled">;
+
+const FormButton = React.forwardRef<React.ElementRef<typeof Button>, FormButtonProps>((props, ref) => {
+  const { pending } = useFormStatus();
+  return (
+    <Button ref={ref} {...props} disabled={pending} loading={pending}>
+      {pending ? props.loadingText : props.children}
+    </Button>
+  );
+});
+FormButton.displayName = "FormButton";
+
+export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField, FormButton };

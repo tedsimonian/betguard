@@ -26,3 +26,18 @@ export const getWeekNumber = (date: Date): number => {
   const pastDaysOfYear: number = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
   return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 };
+
+/**
+ * Check if two dates are the same day
+ *
+ * @param date1 The first date
+ * @param date2 The second date
+ * @returns A boolean indicating if the two dates are the same day
+ */
+export const isSameDay = (date1: Date, date2: Date) => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+};

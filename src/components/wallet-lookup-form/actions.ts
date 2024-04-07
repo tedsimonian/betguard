@@ -8,7 +8,7 @@ import {
   dropsToXrp,
 } from "xrpl";
 import { ZodError } from "zod";
-import { analyzeTransactions, fetchTransactionHistory, request, summarizeTransactions } from "@/lib/xrpl";
+import { analyzeTransactions, fetchLastSevenDayTransactionHistory, request, summarizeTransactions } from "@/lib/xrpl";
 import type { Wallet } from "@/state/atoms/wallet-atom";
 import { ServerActionState } from "@/types/common";
 import { formSchema } from "./validation";
@@ -35,8 +35,8 @@ export const getWalletInfo = async (
     const account_address = ai_response.result.account_data.Account;
     const xrp_balance = dropsToXrp(Number(ai_response.result.account_data.Balance));
 
-    const transactions = await fetchTransactionHistory(walletAddress);
-    const analyzed_transactions = analyzeTransactions(transactions, walletAddress);
+    const last_seven_days_transactions = await fetchLastSevenDayTransactionHistory(walletAddress);
+    const analyzed_transactions = analyzeTransactions(last_seven_days_transactions, walletAddress);
     const summary = summarizeTransactions(analyzed_transactions);
 
     const transformed_lines = al_response.result.lines.map((line) => ({
