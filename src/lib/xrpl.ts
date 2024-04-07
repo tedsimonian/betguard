@@ -83,7 +83,7 @@ export const fetchLastSevenDayTransactionHistory = async (
       });
 
       // Temporary array to hold transactions for this fetch iteration
-      const current_iteration_transactions = [];
+      const current_iteration_transactions: AccountTxTransaction[] = [];
 
       for (const transaction of tx_response.result.transactions) {
         // Ensure the transaction type matches
