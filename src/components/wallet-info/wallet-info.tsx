@@ -2,33 +2,60 @@
 
 import { useAtomValue } from "jotai";
 import { isEmpty } from "lodash";
-import { walletAtom } from "@/state/atoms/wallet-atom";
+import { wallet_atom } from "@/state/atoms/wallet-atom";
+import { Asset } from "@/types/common";
 import { CodeBlock } from "../ui/block/code_block";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card/card";
 
 export const WalletInfo = () => {
-  const wallet = useAtomValue(walletAtom);
+  const wallet = useAtomValue(wallet_atom);
 
-  if (!wallet || isEmpty(wallet.address)) return null;
+  if (!wallet || isEmpty(wallet.account)) return null;
+
+  const formatCurrency = (currency: Asset) => {
+    return `${currency.value} ${currency.currency} (Issuer: ${currency.issuer})`;
+  };
 
   return (
-    <div className="w-full">
+    <div className="w-full rounded-lg bg-gray-700 p-4 shadow-md">
       <Card>
-        <CardHeader>
-          <CardTitle>Wallet</CardTitle>
-          <CardDescription>Address: {wallet.address}</CardDescription>
+        <CardHeader className="text-white">
+          <CardTitle>Wallet Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <CardDescription>Assets: {JSON.stringify(wallet.assets, null, 2)}</CardDescription>
-        </CardContent>
-        <CardFooter>
-          <CardDescription>
-            <div className="flex flex-col justify-between gap-2">
-              <div>Other:</div>
-              {wallet.other ? <CodeBlock content={JSON.stringify(wallet.other, null, 2)} /> : null}
+          <div className="mb-4">
+            <CardDescription className="font-bold">Address:</CardDescription>
+            <CardDescription>{wallet.account}</CardDescription>
+          </div>
+          <div className="mb-4">
+            <CardDescription className="font-bold">XRP Balance:</CardDescription>
+            <CardDescription>
+              {wallet.balance.value} {wallet.balance.currency}
+            </CardDescription>
+          </div>
+          <div className="mb-4">
+            <CardDescription className="font-bold">Assets:</CardDescription>
+            <ul className="list-disc pl-5">
+              {wallet.assets.map((asset, index) => (
+                <li key={index}>{formatCurrency(asset)}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="mb-4">
+            <CardDescription className="font-bold">Custodial:</CardDescription>
+            <CardDescription>{wallet.is_custodial}</CardDescription>
+          </div>
+          <div className="mb-4">
+            <CardDescription className="font-bold">KYC Verified:</CardDescription>
+            <CardDescription>{wallet.is_xumm_kyc_approved ? "Yes" : "No"}</CardDescription>
+          </div>
+          {wallet.depositing_accounts && (
+            <div className="mb-4">
+              <CardDescription className="font-bold">Depositing Accounts:</CardDescription>
+              <CodeBlock content={JSON.stringify(wallet.depositing_accounts, null, 2)} />
             </div>
-          </CardDescription>
-        </CardFooter>
+          )}
+        </CardContent>
       </Card>
     </div>
   );

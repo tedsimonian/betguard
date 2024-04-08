@@ -139,14 +139,16 @@ type FormButtonProps = {
   loadingText?: string;
 } & Omit<React.ComponentPropsWithoutRef<typeof Button>, "loading" | "disabled">;
 
-const FormButton = React.forwardRef<React.ElementRef<typeof Button>, FormButtonProps>((props, ref) => {
-  const { pending } = useFormStatus();
-  return (
-    <Button ref={ref} {...props} disabled={pending} loading={pending}>
-      {pending ? props.loadingText : props.children}
-    </Button>
-  );
-});
+const FormButton = React.forwardRef<React.ElementRef<typeof Button>, FormButtonProps>(
+  ({ loadingText, ...props }, ref) => {
+    const { pending } = useFormStatus();
+    return (
+      <Button ref={ref} {...props} disabled={pending} loading={pending}>
+        {pending ? loadingText : props.children}
+      </Button>
+    );
+  }
+);
 FormButton.displayName = "FormButton";
 
 export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField, FormButton };

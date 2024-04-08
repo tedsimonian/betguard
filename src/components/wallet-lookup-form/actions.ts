@@ -1,71 +1,66 @@
 "use server";
 
-import {
-  type AccountInfoRequest,
-  type AccountInfoResponse,
-  type AccountLinesRequest,
-  type AccountLinesResponse,
-  dropsToXrp,
-} from "xrpl";
 import { ZodError } from "zod";
-import { analyzeTransactions, fetchLastSevenDayTransactionHistory, request, summarizeTransactions } from "@/lib/xrpl";
+
+import { getAccountInfo, getAssets, getDepositingAccounts, getXummKYCStatus, isCustodialWallet } from "@/lib/xrp-scan";
 import type { Wallet } from "@/state/atoms/wallet-atom";
 import { ServerActionState } from "@/types/common";
-import { formSchema } from "./validation";
+import { form_schema } from "./validation";
 
 export const getWalletInfo = async (
   prevState: ServerActionState<Wallet>,
   data: FormData
 ): Promise<ServerActionState<Wallet>> => {
   try {
-    const { walletAddress } = formSchema.parse(data);
+    console.debug("Parsing form data to extract wallet address.");
+    const { wallet_address } = form_schema.parse(data);
+    console.debug(`Wallet address extracted: ${wallet_address}`);
 
-    const ai_response = await request<AccountInfoRequest, AccountInfoResponse>({
-      command: "account_info",
-      account: walletAddress,
-      ledger_index: "validated",
+    console.debug(`Fetching account info for wallet address: ${wallet_address}`);
+    const account_info = await getAccountInfo({
+      account: wallet_address,
     });
+    console.debug(`Account info retrieved for ${wallet_address}:`, account_info);
 
-    const al_response = await request<AccountLinesRequest, AccountLinesResponse>({
-      command: "account_lines",
-      account: walletAddress,
-      ledger_index: "validated",
+    console.debug(`Fetching assets for wallet address: ${wallet_address}`);
+    const assets = await getAssets(wallet_address);
+    console.debug(`Assets retrieved for ${wallet_address}:`, assets);
+
+    console.debug(`Fetching Xumm KYC status for wallet address: ${wallet_address}`);
+    const xumm_kyc_status = await getXummKYCStatus({
+      account: wallet_address,
     });
+    console.debug(`Xumm KYC status for ${wallet_address}:`, xumm_kyc_status);
 
-    const account_address = ai_response.result.account_data.Account;
-    const xrp_balance = dropsToXrp(Number(ai_response.result.account_data.Balance));
+    console.debug(`Fetching custodial status for wallet address: ${wallet_address}`);
+    const is_custodial = await isCustodialWallet(wallet_address);
+    console.debug(`Custodial status for ${wallet_address}:`, is_custodial);
 
-    const last_seven_days_transactions = await fetchLastSevenDayTransactionHistory(walletAddress);
-    const analyzed_transactions = analyzeTransactions(last_seven_days_transactions, walletAddress);
-    const summary = summarizeTransactions(analyzed_transactions);
+    const depositing_accounts = await getDepositingAccounts(wallet_address);
 
-    const transformed_lines = al_response.result.lines.map((line) => ({
-      currency: line.currency,
-      value: line.balance,
-      issuer: line.account,
-    }));
-
+    console.debug(`Returning data for ${wallet_address}.`);
     return {
       status: "success",
-      message: `Successfully retrieved account info for ${walletAddress}.`,
+      message: `Successfully retrieved account info for ${wallet_address}.`,
       data: {
-        address: account_address,
         balance: {
           currency: "XRP",
-          value: String(xrp_balance),
+          value: parseFloat(account_info.xrpBalance),
           issuer: "",
         },
-        total_balance: {
-          currency: "USD",
-          value: String(0),
-          issuer: "",
-        },
-        assets: transformed_lines,
+        account: account_info.account,
+        account_name: account_info.accountName?.name,
+        parent: account_info.parent,
+        parent_name: account_info.parentName?.name,
+        is_custodial,
+        is_xumm_kyc_approved: xumm_kyc_status.kycApproved,
+        assets,
         transactions: [],
-        other: summary,
+        depositing_accounts: depositing_accounts,
       },
     };
   } catch (e) {
+    console.error("Error:", e);
     if (e instanceof ZodError) {
       return {
         status: "error",

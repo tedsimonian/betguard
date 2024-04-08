@@ -7,3 +7,7 @@ export const JSON_RPC_URLS = {
   Mainnet_3: "https://s1.ripple.com/",
   Mainnet_4: "https://s2.ripple.com/",
 } as const;
+
+export const XRP_SCAN_API_URL = "https://api.xrpscan.com/api/v1";
+
+export const WEEK_IN_DAYS = 7;

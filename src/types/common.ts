@@ -20,6 +20,7 @@ export type ServerActionState<TData> =
 export type Address = {
   address: string;
   tag?: number | null;
+  domain?: string | null;
 };
 
 export type Asset = {
@@ -28,7 +29,7 @@ export type Asset = {
   issuer: string | null;
 };
 
-export type TransactionTransferType = "in" | "out" | "internal";
+export type TransactionTransferType = "deposit" | "withdrawal";
 
 export type Transaction = {
   transfer: TransactionTransferType;

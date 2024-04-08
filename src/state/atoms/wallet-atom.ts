@@ -1,31 +1,35 @@
 import { atom } from "jotai";
-import { type Amount } from "xrpl";
-import { Transaction } from "@/types/common";
+import { IsCustodialAccountEnum } from "@/lib/xrp-scan";
+import { Asset, Transaction } from "@/types/common";
 
 export type Wallet = {
-  address: string;
-  balance: Amount;
-  total_balance: Amount;
-  assets: Amount[];
+  account: string;
+  balance: Asset;
+  account_name?: string | null;
+  parent: string;
+  parent_name?: string | null;
+  is_custodial: IsCustodialAccountEnum;
+  is_xumm_kyc_approved: boolean;
+  assets: Asset[];
   transactions: Transaction[];
-  other: any;
+  depositing_accounts: any;
 };
 
-export const defaultWallet: Wallet = {
-  address: "XXXXXXXXXXXXXXXXXXXXXXXX",
+export const default_wallet: Wallet = {
+  account: "XXXXXXXXXXXXXXXXXXXXXXXX",
   balance: {
     currency: "XRP",
-    value: "0",
+    value: 0,
     issuer: "",
   },
-  total_balance: {
-    currency: "USD",
-    value: "0",
-    issuer: "",
-  },
+  account_name: null,
+  parent: "XXXXXXXXXXXXXXXXXXXXXXXX",
+  parent_name: null,
+  is_custodial: IsCustodialAccountEnum.UNKNOWN,
+  is_xumm_kyc_approved: false,
   assets: [],
   transactions: [],
-  other: null,
+  depositing_accounts: null,
 };
 
-export const walletAtom = atom<Wallet>(defaultWallet);
+export const wallet_atom = atom<Wallet>(default_wallet);

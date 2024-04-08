@@ -9,23 +9,23 @@ import { FieldPath, useForm } from "react-hook-form";
 import { Form, FormButton, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form/form";
 import { Input } from "@/components/ui/input/input";
 
-import { defaultWallet, type Wallet, walletAtom } from "@/state/atoms/wallet-atom";
+import { default_wallet, type Wallet, wallet_atom } from "@/state/atoms/wallet-atom";
 import { ServerActionState } from "@/types/common";
 import { getWalletInfo } from "./actions";
-import { formSchema } from "./validation";
+import { form_schema } from "./validation";
 
 export type FormValues = {
-  walletAddress: string;
+  wallet_address: string;
 };
 
 export const WalletLookupForm = () => {
-  const [_, setWallet] = useAtom(walletAtom);
+  const [_, setWallet] = useAtom(wallet_atom);
 
   const form = useForm<FormValues>({
     mode: "all",
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(form_schema),
     defaultValues: {
-      walletAddress: "",
+      wallet_address: "",
     },
   });
 
@@ -33,17 +33,18 @@ export const WalletLookupForm = () => {
 
   useEffect(() => {
     if (!state) {
-      setWallet(defaultWallet);
+      setWallet(default_wallet);
       return;
     }
     if (state.status === "error") {
-      console.log(state.errors);
+      console.debug("state", state);
+      console.debug(state.errors);
       state.errors?.forEach((error) => {
         form.setError(error.path as FieldPath<FormValues>, {
           message: error.message,
         });
       });
-      setWallet(defaultWallet);
+      setWallet(default_wallet);
     }
     if (state.status === "success") {
       setWallet(state.data!);
@@ -55,7 +56,7 @@ export const WalletLookupForm = () => {
       <form action={formAction} className="space-y-8">
         <FormField
           control={form.control}
-          name="walletAddress"
+          name="wallet_address"
           render={({ field }) => (
             <FormItem>
               <FormControl>

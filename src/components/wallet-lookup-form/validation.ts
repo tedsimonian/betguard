@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
-export const formSchema = zfd.formData({
-  walletAddress: zfd.text(z.string().min(1)),
+export const form_schema = zfd.formData({
+  wallet_address: zfd.text(z.string().min(1)),
 });
