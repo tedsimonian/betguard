@@ -86,3 +86,59 @@ export const isSameDay = (date1: Date, date2: Date) => {
     date1.getDate() === date2.getDate()
   );
 };
+
+type CurrencyFormatOptions = {
+  symbolReplacement: string | null;
+  currencyCode: string;
+  locale: string;
+};
+
+/**
+ * Formats a number or string into a currency string for display.
+ *
+ * @param value The value to format
+ * @param options The options to use for formatting
+ * @returns A formatted currency string
+ */
+export const formatCurrency = (value: number | string, options?: CurrencyFormatOptions): string => {
+  const { symbolReplacement, currencyCode, locale } = options ?? {
+    symbolReplacement: null,
+    currencyCode: "USD",
+    locale: "en-US",
+  };
+
+  const numberValue = typeof value === "string" ? parseFloat(value) : value;
+
+  let formattedCurrency = new Intl.NumberFormat(locale ?? "en-US", {
+    style: "currency",
+    currency: currencyCode ?? "USD",
+  }).format(numberValue);
+
+  if (symbolReplacement !== null) {
+    formattedCurrency = formattedCurrency.replace(/[\u00A4$]/, symbolReplacement);
+  }
+
+  return formattedCurrency;
+};
+
+/**
+ * Formats a number string to add decimals and commas for readability.
+ *
+ * @param numberString The number string to format
+ * @returns A string with the formatted number
+ */
+export const formatNumber = (value: number | string): string => {
+  const number = typeof value === "string" ? parseFloat(value) : value;
+  return number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+
+/**
+ * Capitalizes the first letter of a string.
+ *
+ * @param str The string to capitalize
+ * @returns The capitalized string
+ */
+export const capitalizeString = (str: string): string => {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};

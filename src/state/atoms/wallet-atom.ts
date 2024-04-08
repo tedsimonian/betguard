@@ -1,6 +1,6 @@
 import { atom } from "jotai";
-import { IsCustodialAccountEnum } from "@/lib/xrp-scan";
-import { Asset, Transaction } from "@/types/common";
+import { type DepositingAccount, IsCustodialAccountEnum } from "@/lib/xrp-scan";
+import type { Asset, Transaction } from "@/types/common";
 
 export type Wallet = {
   account: string;
@@ -12,7 +12,7 @@ export type Wallet = {
   is_xumm_kyc_approved: boolean;
   assets: Asset[];
   transactions: Transaction[];
-  depositing_accounts: any;
+  depositing_accounts: DepositingAccount[];
 };
 
 export const default_wallet: Wallet = {
@@ -29,7 +29,7 @@ export const default_wallet: Wallet = {
   is_xumm_kyc_approved: false,
   assets: [],
   transactions: [],
-  depositing_accounts: null,
+  depositing_accounts: [],
 };
 
 export const wallet_atom = atom<Wallet>(default_wallet);

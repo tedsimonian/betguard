@@ -2,61 +2,33 @@
 
 import { useAtomValue } from "jotai";
 import { isEmpty } from "lodash";
+import { capitalizeString, formatNumber } from "@/lib/utils";
 import { wallet_atom } from "@/state/atoms/wallet-atom";
-import { Asset } from "@/types/common";
-import { CodeBlock } from "../ui/block/code_block";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card/card";
+import { InfoCard } from "../ui/card";
+import { AssetTable } from "../ui/table/asset-table";
+import { DepositerTable } from "../ui/table/depositer-table";
 
 export const WalletInfo = () => {
   const wallet = useAtomValue(wallet_atom);
 
   if (!wallet || isEmpty(wallet.account)) return null;
 
-  const formatCurrency = (currency: Asset) => {
-    return `${currency.value} ${currency.currency} (Issuer: ${currency.issuer})`;
-  };
-
   return (
-    <div className="w-full rounded-lg bg-gray-700 p-4 shadow-md">
-      <Card>
-        <CardHeader className="text-white">
-          <CardTitle>Wallet Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-4">
-            <CardDescription className="font-bold">Address:</CardDescription>
-            <CardDescription>{wallet.account}</CardDescription>
-          </div>
-          <div className="mb-4">
-            <CardDescription className="font-bold">XRP Balance:</CardDescription>
-            <CardDescription>
-              {wallet.balance.value} {wallet.balance.currency}
-            </CardDescription>
-          </div>
-          <div className="mb-4">
-            <CardDescription className="font-bold">Assets:</CardDescription>
-            <ul className="list-disc pl-5">
-              {wallet.assets.map((asset, index) => (
-                <li key={index}>{formatCurrency(asset)}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="mb-4">
-            <CardDescription className="font-bold">Custodial:</CardDescription>
-            <CardDescription>{wallet.is_custodial}</CardDescription>
-          </div>
-          <div className="mb-4">
-            <CardDescription className="font-bold">KYC Verified:</CardDescription>
-            <CardDescription>{wallet.is_xumm_kyc_approved ? "Yes" : "No"}</CardDescription>
-          </div>
-          {wallet.depositing_accounts && (
-            <div className="mb-4">
-              <CardDescription className="font-bold">Depositing Accounts:</CardDescription>
-              <CodeBlock content={JSON.stringify(wallet.depositing_accounts, null, 2)} />
-            </div>
-          )}
-        </CardContent>
-      </Card>
+    <div className="flex w-full flex-col gap-4 rounded-lg bg-gray-700 p-4 shadow-md">
+      <div className="grid grid-cols-2 gap-4">
+        <InfoCard title="Address" content={wallet.account} />
+        <InfoCard title="XRP Balance" content={`${formatNumber(wallet.balance.value)} ${wallet.balance.currency}`} />
+        <InfoCard title="Custodial" content={capitalizeString(wallet.is_custodial)} />
+        <InfoCard title="KYC Verified" content={wallet.is_xumm_kyc_approved ? "Yes" : "No"} />
+      </div>
+      {wallet.depositing_accounts && (
+        <div>
+          <DepositerTable rows={wallet.depositing_accounts} />
+        </div>
+      )}
+      <div>
+        <AssetTable rows={wallet.assets} />
+      </div>
     </div>
   );
 };

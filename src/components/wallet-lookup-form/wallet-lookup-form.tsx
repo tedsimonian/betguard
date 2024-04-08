@@ -4,13 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
-import { FieldPath, useForm } from "react-hook-form";
+import type { FieldPath } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { Form, FormButton, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form/form";
 import { Input } from "@/components/ui/input/input";
 
 import { default_wallet, type Wallet, wallet_atom } from "@/state/atoms/wallet-atom";
-import { ServerActionState } from "@/types/common";
+import type { ServerActionState } from "@/types/common";
 import { getWalletInfo } from "./actions";
 import { form_schema } from "./validation";
 

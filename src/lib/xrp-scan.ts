@@ -1,3 +1,4 @@
+import { dropsToXrp } from "xrpl";
 import { XRP_SCAN_API_URL } from "@/constants";
 import type { Asset } from "@/types/common";
 import { normalizeCurrencyCode } from "./utils";
@@ -93,7 +94,7 @@ export const isCustodialWallet = async (wallet_address: string): Promise<IsCusto
   }
 };
 
-type DepositingAccount = {
+export type DepositingAccount = {
   account: string;
   account_name?: string | null;
   destination_tag?: number | null;
@@ -124,7 +125,7 @@ export const getDepositingAccounts = async (wallet_address: string): Promise<Dep
           account_name: DestinationName?.name,
           destination_tag: DestinationTag,
           currency: Amount.currency,
-          value: Amount.value,
+          value: dropsToXrp(Amount.value),
           frequency: 1,
         };
       } else {

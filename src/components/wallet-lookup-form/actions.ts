@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 
 import { getAccountInfo, getAssets, getDepositingAccounts, getXummKYCStatus, isCustodialWallet } from "@/lib/xrp-scan";
 import type { Wallet } from "@/state/atoms/wallet-atom";
-import { ServerActionState } from "@/types/common";
+import type { ServerActionState } from "@/types/common";
 import { form_schema } from "./validation";
 
 export const getWalletInfo = async (
