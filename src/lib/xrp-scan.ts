@@ -110,7 +110,7 @@ export const getDepositingAccounts = async (wallet_address: string): Promise<Dep
     account: wallet_address,
   });
 
-  const depositingAccountsMap: { [key: string]: DepositingAccount } = {};
+  const depositing_accounts_map: { [key: string]: DepositingAccount } = {};
 
   account_tx.transactions.forEach((transaction) => {
     const { Destination, DestinationTag, DestinationName, Amount } = transaction;
@@ -119,8 +119,8 @@ export const getDepositingAccounts = async (wallet_address: string): Promise<Dep
     if (Amount && Amount.currency) {
       const key = Destination;
 
-      if (!depositingAccountsMap[key]) {
-        depositingAccountsMap[key] = {
+      if (!depositing_accounts_map[key]) {
+        depositing_accounts_map[key] = {
           account: Destination,
           account_name: DestinationName?.name,
           destination_tag: DestinationTag,
@@ -129,11 +129,11 @@ export const getDepositingAccounts = async (wallet_address: string): Promise<Dep
           frequency: 1,
         };
       } else {
-        depositingAccountsMap[key]!.value += Amount.value;
-        depositingAccountsMap[key]!.frequency += 1;
+        depositing_accounts_map[key]!.value += Amount.value;
+        depositing_accounts_map[key]!.frequency += 1;
       }
     }
   });
 
-  return Object.values(depositingAccountsMap);
+  return Object.values(depositing_accounts_map);
 };
