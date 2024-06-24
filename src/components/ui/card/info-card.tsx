@@ -1,5 +1,5 @@
+import { CopyToClipboardButton } from "@/components/ui/button/copy-button";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
-import { CopyToClipboardButton } from "../button";
 
 type InfoCardProps = {
   title: string;

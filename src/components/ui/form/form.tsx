@@ -5,9 +5,9 @@ import { useFormStatus } from "react-dom";
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import { Controller, FormProvider, useFormContext } from "react-hook-form";
 
+import { Button } from "@/components/ui/button/button";
 import { Label } from "@/components/ui/label/label";
 import { cn } from "@/lib/utils";
-import { Button } from "../button/button";
 
 const Form = FormProvider;
 
