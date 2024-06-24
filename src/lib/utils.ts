@@ -18,28 +18,40 @@ export const isTickerSymbol = (ticker: string) => {
 export const normalizeCurrencyCode = (currencyCode: string, maxLength = 20) => {
   if (!currencyCode) return "";
 
-  if (currencyCode.length === 3 && currencyCode.trim().toLowerCase() !== "xrp") {
+  console.debug(`Normalizing currency code: ${currencyCode}`);
+
+  if (currencyCode.length === 3) {
+    console.debug(`Currency code is a standard currency code: ${currencyCode}`);
     // "Standard" currency code
     return currencyCode.trim();
   }
 
   if (currencyCode.match(/^[a-fA-F0-9]{40}$/) && !isNaN(parseInt(currencyCode, 16))) {
+    console.debug(`Currency code is a non-standard currency code: ${currencyCode}`);
     // Hexadecimal currency code
     const hex = currencyCode.toString().replace(/(00)+$/g, "");
     if (hex.startsWith("01")) {
+      console.debug(`Currency code is an old demurrage code: ${currencyCode}`);
       // Old demurrage code. https://xrpl.org/demurrage.html
       return convertDemurrageToUTF8(currencyCode);
     }
     if (hex.startsWith("02")) {
+      console.debug(
+        `Currency code is an XLS-16d NFT Metadata using XLS-15d Concise Transaction Identifier: ${currencyCode}`
+      );
       // XLS-16d NFT Metadata using XLS-15d Concise Transaction Identifier
       // https://github.com/XRPLF/XRPL-Standards/discussions/37
-      const xlf15d = Buffer.from(hex, "hex").slice(8).toString("utf-8").slice(0, maxLength).trim();
+      const xlf15d = Buffer.from(hex, "hex").subarray(8).toString("utf-8").slice(0, maxLength).trim();
       if (xlf15d.match(/[a-zA-Z0-9]{3,}/) && xlf15d.toLowerCase() !== "xrp") {
+        console.debug(
+          `Currency code is an XLS-16d NFT Metadata using XLS-15d Concise Transaction Identifier: ${currencyCode}`
+        );
         return xlf15d;
       }
     }
     const decodedHex = Buffer.from(hex, "hex").toString("utf-8").slice(0, maxLength).trim();
     if (decodedHex.match(/[a-zA-Z0-9]{3,}/) && decodedHex.toLowerCase() !== "xrp") {
+      console.debug(`Currency code is an ASCII or UTF-8 encoded alphanumeric code: ${currencyCode}`);
       // ASCII or UTF-8 encoded alphanumeric code, 3+ characters long
       return decodedHex;
     }
@@ -141,4 +153,14 @@ export const formatNumber = (value: number | string): string => {
 export const capitalizeString = (str: string): string => {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+/**
+ * Checks if a currency code is XRP.
+ *
+ * @param currencyCode The currency code to check
+ * @returns A boolean indicating if the currency code is XRP
+ */
+export const isXRP = (currencyCode: string): boolean => {
+  return currencyCode.trim().toLowerCase() === "xrp";
 };

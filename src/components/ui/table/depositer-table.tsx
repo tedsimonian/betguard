@@ -20,10 +20,10 @@ export const DepositerTable = ({ rows }: DepositerTableProps) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Destination Wallet</TableHead>
-              <TableHead className="table-cell text-center">Currency</TableHead>
-              <TableHead className="table-cell text-center">Value</TableHead>
-              <TableHead className="hidden text-center md:table-cell">Frequency</TableHead>
+              <TableHead>Wallet Address</TableHead>
+              <TableHead className="table-cell text-right">Currency</TableHead>
+              <TableHead className="table-cell text-right">Value</TableHead>
+              <TableHead className="hidden text-right md:table-cell">Frequency</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -36,9 +36,9 @@ export const DepositerTable = ({ rows }: DepositerTableProps) => {
                     <div className="text-sm text-orange-300">Destination Tag: {row.destination_tag}</div>
                   ) : null}
                 </TableCell>
-                <TableCell className="table-cell text-center">{row.currency}</TableCell>
+                <TableCell className="table-cell text-right">{row.currency}</TableCell>
                 <TableCell className="table-cell text-right">{formatNumber(row.value)}</TableCell>
-                <TableCell className="hidden text-center md:table-cell">{row.frequency}</TableCell>
+                <TableCell className="hidden text-right md:table-cell">{row.frequency}</TableCell>
               </TableRow>
             ))}
           </TableBody>

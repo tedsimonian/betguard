@@ -1,7 +1,7 @@
 import { dropsToXrp } from "xrpl";
 import { XRP_SCAN_API_URL } from "@/constants";
 import type { Asset } from "@/types/common";
-import { normalizeCurrencyCode } from "./utils";
+import { isXRP, normalizeCurrencyCode } from "./utils";
 import type {
   AccountAssetsRequest,
   AccountAssetsResponse,
@@ -25,30 +25,31 @@ const fetchApi = async <TResponse = any>(url: string): Promise<TResponse> => {
   const json_response = (await response.json()) as TResponse;
   return json_response;
 };
-export const getAccountInfo = async (request: AccountRequest): Promise<AccountResponse> => {
+
+export const fetchAccountInfo = async (request: AccountRequest): Promise<AccountResponse> => {
   return await fetchApi<AccountResponse>(`${XRP_SCAN_API_URL}/account/${request.account}`);
 };
 
-export const getAccountAssets = async (request: AccountAssetsRequest): Promise<AccountAssetsResponse> => {
+export const fetchAccountAssets = async (request: AccountAssetsRequest): Promise<AccountAssetsResponse> => {
   return await fetchApi<AccountAssetsResponse>(`${XRP_SCAN_API_URL}/account/${request.account}/assets`);
 };
 
-export const getAccountTransactions = async (
+export const fetchAccountTransactions = async (
   request: AccountTransactionsRequest
 ): Promise<AccountTransactionsResponse> => {
   return await fetchApi<AccountTransactionsResponse>(`${XRP_SCAN_API_URL}/account/${request.account}/transactions`);
 };
 
-export const getWellKnownAccounts = async (): Promise<WellKnownAccountResponse> => {
+export const fetchWellKnownAccounts = async (): Promise<WellKnownAccountResponse> => {
   return await fetchApi<WellKnownAccountResponse>(`${XRP_SCAN_API_URL}/names/well-known`);
 };
 
-export const getXummKYCStatus = async (request: XummKYCStatusRequest): Promise<XummKYCStatusResponse> => {
+export const fetchXummKYCStatus = async (request: XummKYCStatusRequest): Promise<XummKYCStatusResponse> => {
   return await fetchApi<XummKYCStatusResponse>(`${XRP_SCAN_API_URL}/account/${request.account}/xummkyc`);
 };
 
 export const getAssets = async (account: string): Promise<Asset[]> => {
-  const account_assets = await getAccountAssets({
+  const account_assets = await fetchAccountAssets({
     account,
   });
 
@@ -71,8 +72,8 @@ export enum IsCustodialAccountEnum {
 
 export const isCustodialWallet = async (wallet_address: string): Promise<IsCustodialAccountEnum> => {
   try {
-    const well_known_accounts = await getWellKnownAccounts();
-    const xumm_kyc_status = await getXummKYCStatus({
+    const well_known_accounts = await fetchWellKnownAccounts();
+    const xumm_kyc_status = await fetchXummKYCStatus({
       account: wallet_address,
     });
 
@@ -106,7 +107,7 @@ export type DepositingAccount = {
 type DepositingAccountResponse = DepositingAccount[];
 
 export const getDepositingAccounts = async (wallet_address: string): Promise<DepositingAccountResponse> => {
-  const account_tx = await getAccountTransactions({
+  const account_tx = await fetchAccountTransactions({
     account: wallet_address,
   });
 
@@ -119,17 +120,23 @@ export const getDepositingAccounts = async (wallet_address: string): Promise<Dep
     if (Amount && Amount.currency) {
       const key = Destination;
 
+      let amount = Amount.value;
+      // check if currency is xrp, if it is, convert drops to xrp
+      if (isXRP(Amount.currency)) {
+        amount = dropsToXrp(Amount.value);
+      }
+
       if (!depositing_accounts_map[key]) {
         depositing_accounts_map[key] = {
           account: Destination,
           account_name: DestinationName?.name,
           destination_tag: DestinationTag,
-          currency: Amount.currency,
-          value: dropsToXrp(Amount.value),
+          currency: normalizeCurrencyCode(Amount.currency),
+          value: amount,
           frequency: 1,
         };
       } else {
-        depositing_accounts_map[key]!.value += Amount.value;
+        depositing_accounts_map[key]!.value += amount;
         depositing_accounts_map[key]!.frequency += 1;
       }
     }

@@ -17,7 +17,10 @@ export const WalletInfo = () => {
     <div className="flex w-full flex-col gap-4 rounded-lg bg-gray-700 p-4 shadow-md">
       <div className="grid grid-cols-2 gap-4">
         <InfoCard title="Address" content={wallet.account} />
-        <InfoCard title="XRP Balance" content={`${formatNumber(wallet.balance.value)} ${wallet.balance.currency}`} />
+        <InfoCard
+          title="Current XRP Balance"
+          content={`${formatNumber(wallet.balance.value)} ${wallet.balance.currency}`}
+        />
         <InfoCard title="Custodial" content={capitalizeString(wallet.is_custodial)} />
         <InfoCard title="KYC Verified" content={wallet.is_xumm_kyc_approved ? "Yes" : "No"} />
       </div>

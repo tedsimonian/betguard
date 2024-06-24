@@ -2,7 +2,13 @@
 
 import { ZodError } from "zod";
 
-import { getAccountInfo, getAssets, getDepositingAccounts, getXummKYCStatus, isCustodialWallet } from "@/lib/xrp-scan";
+import {
+  fetchAccountInfo,
+  fetchXummKYCStatus,
+  getAssets,
+  getDepositingAccounts,
+  isCustodialWallet,
+} from "@/lib/xrp-scan";
 import type { Wallet } from "@/state/atoms/wallet-atom";
 import type { ServerActionState } from "@/types/common";
 import { form_schema } from "./validation";
@@ -17,7 +23,7 @@ export const getWalletInfo = async (
     console.debug(`Wallet address extracted: ${wallet_address}`);
 
     console.debug(`Fetching account info for wallet address: ${wallet_address}`);
-    const account_info = await getAccountInfo({
+    const account_info = await fetchAccountInfo({
       account: wallet_address,
     });
     console.debug(`Account info retrieved for ${wallet_address}:`, account_info);
@@ -27,7 +33,7 @@ export const getWalletInfo = async (
     console.debug(`Assets retrieved for ${wallet_address}:`, assets);
 
     console.debug(`Fetching Xumm KYC status for wallet address: ${wallet_address}`);
-    const xumm_kyc_status = await getXummKYCStatus({
+    const xumm_kyc_status = await fetchXummKYCStatus({
       account: wallet_address,
     });
     console.debug(`Xumm KYC status for ${wallet_address}:`, xumm_kyc_status);
