@@ -1,18 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "./Button";
+import { Button } from "./button";
 
 const meta: Meta<typeof Button> = {
   title: "Button",
   component: Button,
   args: {
-    intent: "primary",
-    underline: false,
+    variant: "default",
     children: "Button",
     size: "lg",
   },
   argTypes: {
-    intent: {
-      options: ["primary", "secondary"],
+    variant: {
+      options: ["default", "secondary"],
       control: { type: "select" },
     },
     size: {
