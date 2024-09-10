@@ -32,21 +32,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - [🎯 Getting Started](#-getting-started)
 - [📃 Scripts Overview](#-scripts-overview)
 - [🔗 Coupling Graph](#-coupling-graph)
-- [🧪 Testing](#-testing)
   - [Running Tests](#running-tests)
-  - [Acceptance Tests](#acceptance-tests)
-  - [Smoke Testing](#smoke-testing)
-- [🎨 Styling and Design System](#-styling-and-design-system)
-  - [CVA - A New Approach to Variants](#cva---a-new-approach-to-variants)
-- [💾 State Management](#-state-management)
-  - [Jotai](#jotai)
-- [🤖 ChatGPT Code Review](#-chatgpt-code-review)
-- [💻 Environment Variables handling](#-environment-variables-handling)
 - [📒 Conventional Commits](#-conventional-commits)
 
 ## 🎯 Getting Started
 
-To get started with this boilerplate, follow these steps:
+To get started, follow these steps:
 
 1. Clone repository
 2. Install the dependencies:
@@ -102,10 +93,6 @@ This will create a `graph.svg` file, which contains a graphical representation o
 
 ![graph](https://user-images.githubusercontent.com/28964599/233662744-3ba89713-8466-49cd-9be7-e6fb38191f58.png)
 
-## 🧪 Testing
-
-This boilerplate comes with various testing setups to ensure your application's reliability and robustness.
-
 ### Running Tests
 
 - **Unit and integration tests**: Run Jest tests using `yarn test`
@@ -113,102 +100,6 @@ This boilerplate comes with various testing setups to ensure your application's 
 - **End-to-end tests (UI mode)**: Run Playwright tests with UI using `yarn e2e:ui`
 
 <img width="1392" alt="image" src="https://user-images.githubusercontent.com/28964599/233666655-93b7d08b-2fd8-406a-b43c-44d4d96cf387.png">
-
-### Acceptance Tests
-
-To write acceptance tests, we leverage Storybook's [`play` function](https://storybook.js.org/docs/react/writing-stories/play-function#writing-stories-with-the-play-function). This allows you to interact with your components and test various user flows within Storybook.
-
-```ts
-/*
- * See https://storybook.js.org/docs/react/writing-stories/play-function#working-with-the-canvas
- * to learn more about using the canvasElement to query the DOM
- */
-export const FilledForm: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    const emailInput = canvas.getByLabelText("email", {
-      selector: "input",
-    });
-
-    await userEvent.type(emailInput, "example-email@email.com", {
-      delay: 100,
-    });
-
-    const passwordInput = canvas.getByLabelText("password", {
-      selector: "input",
-    });
-
-    await userEvent.type(passwordInput, "ExamplePassword", {
-      delay: 100,
-    });
-    // See https://storybook.js.org/docs/react/essentials/actions#automatically-matching-args to learn how to setup logging in the Actions panel
-    const submitButton = canvas.getByRole("button");
-
-    await userEvent.click(submitButton);
-  },
-};
-```
-
-### Smoke Testing
-
-We use Storybook's out-of-the-box support for smoke testing to verify that components render correctly without any errors. Just run `yarn test-storybook` to perform smoke testing. Remember to write stories in JSX or TSX format only. Smoke testing and a lot of other functionalities don't work well with MDX stories.
-
-## 🎨 Styling and Design System
-
-We use Tailwind CSS for styling and CVA for creating a powerful, easy-to-use design system.
-
-### CVA - A New Approach to Variants
-
-While CSS-in-TS libraries such as [Stitches](https://stitches.dev/) and [Vanilla Extract](https://vanilla-extract.style/) are great for building type-safe UI components, they might not be the perfect fit for everyone. You may prefer more control over your stylesheets, need to use a framework like Tailwind CSS, or simply enjoy writing your own CSS.
-
-Creating variants using traditional CSS can be a tedious task, requiring you to manually match classes to props and add types. CVA is here to take that pain away, allowing you to focus on the enjoyable aspects of UI development. By providing an easy and type-safe way to create variants, CVA simplifies the process and helps you create powerful design systems without compromising on the flexibility and control of CSS.
-
-## 💾 State Management
-
-Currently we use Jotai but any state management library works depending on the situation.
-
-### Jotai
-
-[Jotai](https://github.com/pmndrs/jotai) is an atom-based state management library for React that focuses on providing a minimal and straightforward API. Its atom-based approach allows you to manage your state in a granular way while still being highly optimized for bundle size.
-
-## 🤖 ChatGPT Code Review
-
-We've integrated the innovative [ChatGPT Code Review](https://github.com/anc95/ChatGPT-CodeReview) for AI-powered, automated code reviews. This feature provides real-time feedback on your code, helping improve code quality and catch potential issues.
-
-To use ChatGPT Code Review, add an `OPENAI_API_KEY` environment variable with an appropriate key from the OpenAI platform. For setup details, refer to the [Using GitHub Actions](https://github.com/anc95/ChatGPT-CodeReview#using-github-actions) section in the documentation.
-
-![image](https://user-images.githubusercontent.com/28964599/233685071-e1371edf-6359-41c3-a989-335d6ee09cb7.png)
-
-## 💻 Environment Variables handling
-
-[T3 Env](https://env.t3.gg/) is a library that provides environmental variables checking at build time, type validation and transforming. It ensures that your application is using the correct environment variables and their values are of the expected type. You’ll never again struggle with runtime errors caused by incorrect environment variable usage.
-
-Config file is located at `env.ts`. Simply set your client and server variables and import `env` from any file in your project.
-
-```ts
-export const env = createEnv({
-  server: {
-    // Server variables
-    SECRET_KEY: z.string(),
-  },
-  client: {
-    // Client variables
-    API_URL: z.string().url(),
-  },
-  runtimeEnv: {
-    // Assign runtime variables
-    SECRET_KEY: process.env.SECRET_KEY,
-    API_URL: process.env.NEXT_PUBLIC_API_URL,
-  },
-});
-```
-
-If the required environment variables are not set, you'll get an error message:
-
-```sh
-  ❌ Invalid environment variables: { SECRET_KEY: [ 'Required' ] }
-```
 
 ## 📒 Conventional Commits
 
